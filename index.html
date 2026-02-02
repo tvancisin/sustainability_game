@@ -166,13 +166,12 @@
         margin: auto;
         font-family: "Montserrat";
         font-size: 14px;
-        width: 600px;
-        padding: 20px;
+        width: 700px;
         white-space: pre-line;
         overflow: auto;
         border-radius: 5px;
         margin-bottom: 5px;
-        flex: 0.5;
+        flex: 0.7;
       }
 
       @media (max-width: 768px) {
@@ -256,35 +255,36 @@
         transform: scale(1.01) translateY(-10px) translateX(0px);
       }
 
-      @media (max-width: 768px) {
+      @media (max-width: 900px) {
         :root {
-          --card-width: 140px;
-          --card-height: 200px;
+          --card-width: 220px;
+          --card-height: 300px;
         }
       }
 
-      @media (max-width: 480px) {
+      @media (max-width: 780px) {
         :root {
-          --card-width: 110px;
-          --card-height: 160px;
+          --card-width: 200px;
+          --card-height: 260px;
         }
       }
 
       #gameInfo {
-        color: rgb(255, 255, 255);
-        width: 150px;
-        font-family: "Montserrat", sans-serif;
-        position: absolute;
-        font-size: 13px;
-        top: 50%;
-        left: 5px;
-        transform: translateY(-50%);
-        padding: 5px;
-        border-radius: 4px;
+        background-color: #242424;
+        margin: auto;
+        font-family: "Montserrat";
+        font-size: 14px;
+        width: 600px;
+        padding: 20px;
+        white-space: pre-line;
+        overflow: auto;
+        border-radius: 5px;
+        margin-bottom: 5px;
+        flex: 0.5;
       }
 
       .ai-entry {
-        margin-bottom: 8px;
+        margin: 8px;
       }
 
       #aiLog {
@@ -312,6 +312,23 @@
         font-weight: 600;
         margin-bottom: 0.25rem;
       }
+
+      .score {
+        display: flex;
+        gap: 5px;
+        background-color: #595959;
+        padding: 10px;
+        border-radius: 4px;
+      }
+
+      .player {
+        flex: 1; /* equal width columns */
+        background: #242424;
+        color: white;
+        padding: 10px;
+        white-space: NORMAL;
+        border-radius: 4px;
+      }
     </style>
   </head>
 
@@ -319,6 +336,7 @@
     <div id="intro">
       <div class="intro-content">
         <div class="intro-text">
+          <h1>The Digital Sustainability Game</h1>
           <p>
             The digital is material. Digital systems use energy and run on
             hardware made from metals extracted from the earth. Data centres
@@ -403,14 +421,13 @@
       </div>
     </div>
 
-    <h1>The Digital Sustainability Game</h1>
     <div id="pageLayout">
-      <div id="gameInfo"></div>
       <div id="gameArea">
         <div id="playerHand"></div>
       </div>
+      <!-- <div id="gameInfo"></div> -->
       <div id="infoArea">
-        <h2>Cards Played</h2>
+        <h2 style="margin-top: 5px; margin-bottom: 0px">Cards Played</h2>
         <div id="aiLog"></div>
       </div>
     </div>

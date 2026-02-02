@@ -327,6 +327,8 @@ function renderPlayerHand() {
 }
 
 function logAIPlay(aiName, card) {
+  console.log("here");
+
   const aiLogDiv = el("aiLog");
   if (!aiLogDiv) return;
 
@@ -345,17 +347,17 @@ function updateGameInfo() {
 
   if (!infoDiv) return;
   infoDiv.innerHTML = `
-    <strong>${player.name}</strong><br>
-    Progress: ${player.progress},<br> Sustainability: ${player.sustainability}<br>
-    Actions: ${renderCards([...player.actionsPlayed].sort((a, b) => a - b))}<br></br>
+    <strong>${player.name}</strong>
+    Progress: ${player.progress},<br> Sustainability: ${player.sustainability}
+    Actions: ${renderCards([...player.actionsPlayed].sort((a, b) => a - b))}
 
-    <strong>${AI1.name}</strong><br>
-    Progress: ${AI1.progress},<br> Sustainability: ${AI1.sustainability}<br>
-    Actions: ${renderCards([...AI1.actionsPlayed].sort((a, b) => a - b))}<br><br>
+    <strong>${AI1.name}</strong>
+    Progress: ${AI1.progress},<br> Sustainability: ${AI1.sustainability}
+    Actions: ${renderCards([...AI1.actionsPlayed].sort((a, b) => a - b))}
 
-    <strong>${AI2.name}</strong><br>
-    Progress: ${AI2.progress},<br> Sustainability: ${AI2.sustainability}<br>
-    Actions: ${renderCards([...AI2.actionsPlayed].sort((a, b) => a - b))}<br>
+    <strong>${AI2.name}</strong>
+    Progress: ${AI2.progress},<br> Sustainability: ${AI2.sustainability}
+    Actions: ${renderCards([...AI2.actionsPlayed].sort((a, b) => a - b))}
   `;
 }
 
@@ -411,7 +413,10 @@ function generateOutroMessage(P, A1, A2) {
     { who: "ai2", value: A2.sustainability },
   ];
 
-  const total = scores.reduce((sum, s) => sum + (Number.isFinite(s.value) ? s.value : 0), 0);
+  const total = scores.reduce(
+    (sum, s) => sum + (Number.isFinite(s.value) ? s.value : 0),
+    0,
+  );
 
   const pScore = scores[0].value;
   const values = scores.map((s) => s.value);
@@ -449,32 +454,41 @@ function generateOutroMessage(P, A1, A2) {
   let personalMsg = "";
   switch (rankKey) {
     case "first":
-      personalMsg = "Digital sustainability is a shared challenge. You’ve done better than any of your competitors. Congratulations, you have shown leadership!";
+      personalMsg =
+        "Digital sustainability is a shared challenge. You’ve done better than any of your competitors. Congratulations, you have shown leadership!";
       break;
     case "first_tie":
-      personalMsg = "You’re tied for first place! Congratulations, you’ve shown leadership in digital sustainability. Digital sustainability is a shared challenge.";
+      personalMsg =
+        "You’re tied for first place! Congratulations, you’ve shown leadership in digital sustainability. Digital sustainability is a shared challenge.";
       break;
     case "second":
     case "second_tie":
-      personalMsg = "Digital sustainability is a shared challenge. You’re somewhere in the middle of the pack, neither leading the way nor lagging behind.";
+      personalMsg =
+        "Digital sustainability is a shared challenge. You’re somewhere in the middle of the pack, neither leading the way nor lagging behind.";
       break;
     case "third":
     default:
-      personalMsg = "You ended the game with some of the worst digital sustainability in the sector! Digital sustainability is a shared challenge.";
+      personalMsg =
+        "You ended the game with some of the worst digital sustainability in the sector! Digital sustainability is a shared challenge.";
       break;
   }
 
   let globalMsg = "";
   if (total <= 25) {
-    globalMsg = "As for the global picture? Oh no! The world really is in flames! Tech has a lot to answer for. Now what? Revenge?";
+    globalMsg =
+      "As for the global picture? Oh no! The world really is in flames! Tech has a lot to answer for. Now what? Revenge?";
   } else if (total <= 30) {
-    globalMsg = "Of course, it’s not just about you. Efficiencies have come too slowly, and the growth has outpaced the gains. The social and ecological cost of delay has been enormous.";
+    globalMsg =
+      "Of course, it’s not just about you. Efficiencies have come too slowly, and the growth has outpaced the gains. The social and ecological cost of delay has been enormous.";
   } else if (total <= 35) {
-    globalMsg = "Globally, we have a firm foundation, and the future is now looking very bright!";
+    globalMsg =
+      "Globally, we have a firm foundation, and the future is now looking very bright!";
   } else if (total <= 40) {
-    globalMsg = "Globally, we did it! We achieved a rapid and just climate transition. Tech can be proud of the part that it played.";
+    globalMsg =
+      "Globally, we did it! We achieved a rapid and just climate transition. Tech can be proud of the part that it played.";
   } else {
-    globalMsg = "Incredible! Radical, deep change has been achieved. Tech is much more green, democratic, and convivial. You must have been smart AND lucky!";
+    globalMsg =
+      "Incredible! Radical, deep change has been achieved. Tech is much more green, democratic, and convivial. You must have been smart AND lucky!";
   }
 
   const personalSection = `<p><strong>Your result (${placeText}):</strong> ${personalMsg}</p>`;
@@ -555,13 +569,41 @@ function playPlayerCard(index) {
   updateGameInfo();
   updatePlayedLists();
 
+  const aiLogDiv = el("aiLog");
+  const entry = document.createElement("div");
+  entry.className = "score";
+  entry.innerHTML = `
+  <div class="player">
+    <strong>${player.name}</strong><br>
+    Progress: ${player.progress}<br>
+    Sustainability: ${player.sustainability}<br>
+    Actions: ${renderCards([...player.actionsPlayed].sort((a, b) => a - b))}
+  </div>
+
+  <div class="player">
+    <strong>${AI1.name}</strong><br>
+    Progress: ${AI1.progress}<br>
+    Sustainability: ${AI1.sustainability}<br>
+    Actions: ${renderCards([...AI1.actionsPlayed].sort((a, b) => a - b))}
+  </div>
+
+  <div class="player">
+    <strong>${AI2.name}</strong><br>
+    Progress: ${AI2.progress}<br>
+    Sustainability: ${AI2.sustainability}<br>
+    Actions: ${renderCards([...AI2.actionsPlayed].sort((a, b) => a - b))}
+  </div>
+`;
+
+  aiLogDiv.appendChild(entry);
+  entry.scrollIntoView({ behavior: "smooth", block: "end" });
+
   // check for empty deck and show game results
   function checkDeck() {
     if (window.deck.length === 0) {
       emptyDeckStreak++;
 
       if (emptyDeckStreak === 4) {
-
         console.log(player.sustainability, player.progress);
 
         const outro = document.getElementById("outro");
