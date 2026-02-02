@@ -14,6 +14,13 @@ document.getElementById("closeIntro").addEventListener("click", () => {
   setTimeout(() => (intro.style.display = "none"), 400);
 });
 
+const button = document.getElementById("rules_button");
+const intro = document.getElementById("rules");
+
+button.addEventListener("click", () => {
+  intro.classList.toggle("open");
+});
+
 // feedback button
 document.getElementById("feedbackButton").addEventListener("click", () => {
   window.open(

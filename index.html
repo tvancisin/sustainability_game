@@ -23,6 +23,7 @@
         padding: 0;
         height: 100%;
         background-color: black;
+        font-family: "Montserrat", sans-serif;
       }
 
       body {
@@ -120,6 +121,12 @@
       h1 {
         text-align: center;
         flex-shrink: 0;
+        color: #f9f9f9;
+        font-family: "Montserrat";
+      }
+
+      h2 {
+        font-size: 16px;
         color: #f9f9f9;
         font-family: "Montserrat";
       }
@@ -329,6 +336,37 @@
         white-space: NORMAL;
         border-radius: 4px;
       }
+
+      #rules {
+        font-family: "Montserrat", sans-serif;
+        position: fixed; /* fixed is better for side panels */
+        top: 50px;
+        right: 10px;
+        width: 400px;
+        background-color: #242424;
+        z-index: 19;
+        border-radius: 4px;
+        font-size: 14px;
+        padding-right: 5px;
+        padding-bottom: 10px;
+        line-height: 1.4;
+
+        transform: translateX(410px); /* fully off-screen */
+        transition: transform 0.3s ease;
+      }
+
+      #rules.open {
+        transform: translateX(0);
+      }
+
+      #rules_button {
+        background-color: #242424;
+        font-weight: 800;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 19;
+      }
     </style>
   </head>
 
@@ -421,11 +459,46 @@
       </div>
     </div>
 
+    <button id="rules_button">Rules</button>
+    <div id="rules">
+      <h2 style="text-align: center">How to Play</h2>
+      <ul>
+        <li>
+          Earn Progress Points and convert them into
+          <strong>Sustainability Points</strong>.
+        </li>
+        <li>
+          You can play <strong>Action</strong> cards to prepare your
+          organisation for future challenges.
+        </li>
+        <li>
+          You can also play <strong>Event</strong> cards, which trigger effects
+          depending on the Actions already in play.
+        </li>
+        <li>
+          You will be competing alongside two AI-controlled organisations.
+        </li>
+        <li>
+          Read the cards to learn more about digital sustainability, and explore
+          the work of the
+          <a
+            href="https://sas-dhrh.github.io/dhcc-toolkit/index.html"
+            target="_blank"
+            >Digital Humanities Climate Coalition</a
+          >
+          and
+          <a href="https://susaifutures.com/" target="_blank"
+            >Sustainable AI Futures</a
+          >
+          project.
+        </li>
+      </ul>
+    </div>
+
     <div id="pageLayout">
       <div id="gameArea">
         <div id="playerHand"></div>
       </div>
-      <!-- <div id="gameInfo"></div> -->
       <div id="infoArea">
         <h2 style="margin-top: 5px; margin-bottom: 0px">Cards Played</h2>
         <div id="aiLog"></div>
