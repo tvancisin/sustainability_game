@@ -149,6 +149,31 @@ function shuffle(array) {
   return array;
 }
 
+// small async helper to pause execution
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+// update the `#current_steps` UI element with a short status
+// function setCurrentStep(text) {
+//   const node = el("current_steps");
+//   if (!node) return;
+//   node.textContent = text;
+// }
+
+// disable/enable player card interactions by toggling a class
+let cardsDisabled = false;
+
+function disableCards() {
+  cardsDisabled = true;
+  const nodes = document.querySelectorAll('.card');
+  nodes.forEach((n) => n.classList.add('disabled'));
+}
+
+function enableCards() {
+  cardsDisabled = false;
+  const nodes = document.querySelectorAll('.card');
+  nodes.forEach((n) => n.classList.remove('disabled'));
+}
 function generateAI2Name() {
   const buzzwords = [
     "Synergy",
@@ -295,6 +320,7 @@ function renderPlayerHand() {
   player.hand.forEach((card, index) => {
     const cardDiv = document.createElement("div");
     cardDiv.className = "card";
+    if (cardsDisabled) cardDiv.classList.add('disabled');
     cardDiv.style.background = card.type === "action" ? "steelblue" : "#E97132";
 
     // --- Header row: badge + type ---
@@ -334,8 +360,6 @@ function renderPlayerHand() {
 }
 
 function logAIPlay(aiName, card) {
-  console.log("here");
-
   const aiLogDiv = el("aiLog");
   if (!aiLogDiv) return;
 
@@ -346,7 +370,7 @@ function logAIPlay(aiName, card) {
   aiLogDiv.appendChild(entry);
 
   // scroll the new entry into view
-  entry.scrollIntoView({ behavior: "smooth", block: "end" });
+  aiLogDiv.scrollIntoView({ behavior: "smooth", block: "end" });
 }
 
 function updateGameInfo() {
@@ -372,12 +396,12 @@ function renderCards(idArray) {
   return idArray.length === 0
     ? "None"
     : idArray
-        .map((id) => {
-          const card = CARD_BY_ID[id];
-          const cardName = card ? card.name : "Unknown Card";
-          return `<span title="${cardName}">${id}</span>`;
-        })
-        .join(", ");
+      .map((id) => {
+        const card = CARD_BY_ID[id];
+        const cardName = card ? card.name : "Unknown Card";
+        return `<span title="${cardName}">${id}</span>`;
+      })
+      .join(", ");
 }
 
 function setHTMLById(id, html) {
@@ -557,7 +581,7 @@ function playAI2Card() {
 }
 
 let emptyDeckStreak = 0;
-function playPlayerCard(index) {
+async function playPlayerCard(index) {
   const chosenCard = player.hand.splice(index, 1)[0];
   if (!chosenCard) return;
 
@@ -568,39 +592,52 @@ function playPlayerCard(index) {
 
   if (Array.isArray(window.deck) && deck.length) player.hand.push(deck.pop());
 
+  // setCurrentStep("You've played your card...");
+  disableCards();
   logAIPlay(player.name, chosenCard);
+  await sleep(1500);
+  // setCurrentStep("First AI is playing...");
   playAI1Card();
+  await sleep(1500);
+  // setCurrentStep("Second AI is playing...");
   playAI2Card();
-
+  await sleep(1300);
   renderPlayerHand();
   updateGameInfo();
   updatePlayedLists();
+  // setCurrentStep("Your turn");
+  enableCards();
 
   const aiLogDiv = el("aiLog");
   const entry = document.createElement("div");
   entry.className = "score";
   entry.innerHTML = `
-  <div class="player">
-    <strong>${player.name}</strong><br>
-    Progress: ${player.progress}<br>
-    Sustainability: ${player.sustainability}<br>
-    Actions: ${renderCards([...player.actionsPlayed].sort((a, b) => a - b))}
-  </div>
+  <p class="score-title">Current Progress:</p>
 
-  <div class="player">
-    <strong>${AI1.name}</strong><br>
-    Progress: ${AI1.progress}<br>
-    Sustainability: ${AI1.sustainability}<br>
-    Actions: ${renderCards([...AI1.actionsPlayed].sort((a, b) => a - b))}
-  </div>
+  <div class="players">
+    <div class="player">
+      <strong>${player.name}</strong>
+      Progress: ${player.progress}
+      Sustainability: ${player.sustainability}
+      Actions: ${renderCards([...player.actionsPlayed].sort((a, b) => a - b))}
+    </div>
 
-  <div class="player">
-    <strong>${AI2.name}</strong><br>
-    Progress: ${AI2.progress}<br>
-    Sustainability: ${AI2.sustainability}<br>
-    Actions: ${renderCards([...AI2.actionsPlayed].sort((a, b) => a - b))}
+    <div class="player">
+      <strong>${AI1.name}</strong>
+      Progress: ${AI1.progress}
+      Sustainability: ${AI1.sustainability}
+      Actions: ${renderCards([...AI1.actionsPlayed].sort((a, b) => a - b))}
+    </div>
+
+    <div class="player">
+      <strong>${AI2.name}</strong>
+      Progress: ${AI2.progress}
+      Sustainability: ${AI2.sustainability}
+      Actions: ${renderCards([...AI2.actionsPlayed].sort((a, b) => a - b))}
+    </div>
   </div>
 `;
+
 
   aiLogDiv.appendChild(entry);
   entry.scrollIntoView({ behavior: "smooth", block: "end" });

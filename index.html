@@ -262,6 +262,17 @@
         transform: scale(1.01) translateY(-10px) translateX(0px);
       }
 
+      /* Disabled state for cards: no pointer events and no hover transform */
+      .card.disabled {
+        pointer-events: none;
+        opacity: 0.9;
+        filter: grayscale(10%);
+      }
+
+      .card.disabled:hover {
+        transform: none;
+      }
+
       @media (max-width: 900px) {
         :root {
           --card-width: 220px;
@@ -320,20 +331,31 @@
         margin-bottom: 0.25rem;
       }
 
+      .score-title {
+        margin: 5px;
+        margin-top: 0px;
+        font-weight: 800;
+      }
+
       .score {
         display: flex;
+        flex-direction: column; /* stack title + players vertically */
         gap: 5px;
         background-color: #595959;
         padding: 10px;
         border-radius: 4px;
       }
 
+      .players {
+        display: flex; /* players side-by-side */
+        gap: 5px;
+      }
+
       .player {
-        flex: 1; /* equal width columns */
+        flex: 1;
         background: #242424;
         color: white;
         padding: 10px;
-        white-space: NORMAL;
         border-radius: 4px;
       }
 
@@ -496,6 +518,7 @@
     </div>
 
     <div id="pageLayout">
+      <!-- <div id="current_steps">Pick a card</div> -->
       <div id="gameArea">
         <div id="playerHand"></div>
       </div>
